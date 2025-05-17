@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandlerMiddleware } from './src/middlewares/errorHandler.middleware.js';
 import agentRoutes from './src/features/agent/agent.routes.js';
+import userRoutes from './src/features/user/user.routes.js';
 import { jwtAuth } from './src/middlewares/jwtAuth.middleware.js';
 
 const app = express();
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/agents', jwtAuth, agentRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(errorHandlerMiddleware);
 export default app;

@@ -1,7 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-const app = express();
 import { errorHandlerMiddleware } from './src/middlewares/errorHandler.middleware.js';
+import agentRoutes from './src/features/agent/agent.routes.js';
+import { jwtAuth } from './src/middlewares/jwtAuth.middleware.js';
+
+const app = express();
+
+// parsing JSON bodies
+app.use(express.json());
 
 // implement cors
 const corsOptions = {
@@ -14,6 +20,8 @@ app.use(cors(corsOptions));
 app.get('/', (req, res) => {
     res.send('welcome');
 });
+
+app.use('/api/agents', jwtAuth, agentRoutes);
 
 app.use(errorHandlerMiddleware);
 export default app;

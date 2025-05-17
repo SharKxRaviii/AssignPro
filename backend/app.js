@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 const app = express();
 import { errorHandlerMiddleware } from './src/middlewares/errorHandler.middleware.js';
+
 // implement cors
 const corsOptions = {
     origin: 'http://localhost:5173',

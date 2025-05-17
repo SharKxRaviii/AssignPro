@@ -10,7 +10,8 @@ const Login = () => {
                     <input type="email"
                     id="email"
                     placeholder="Enter your email"
-                    required='true'
+                    name="email"
+                    required
                     />
                 </div>
                 
@@ -19,7 +20,8 @@ const Login = () => {
                     <input type="password"
                     id="password"
                     placeholder="Enter your password"
-                    required='true'
+                    name="password"
+                    required
                     />
                 </div>
 

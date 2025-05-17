@@ -1,7 +1,7 @@
 import agentModel from "./agent.schema.js";
 import bcrypt from 'bcrypt';
 
-export const addAgents = async (name, email, mobile, password) => {
+export const createAgent = async (name, email, mobile, password) => {
     try {
         const hashedPass = await bcrypt.hash(password, 12);
         const newAgent = new agentModel({name, email, mobile, password: hashedPass});

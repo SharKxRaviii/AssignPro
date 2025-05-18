@@ -24,7 +24,7 @@ export const signUp = async (name, email, password) => {
 export const signIn = async (email, password) => {
   try {
     // find user by email and exclude password to make the user credentials more secure
-    const user = await userModel.findOne({ email }).select("-password");
+    const user = await userModel.findOne({ email });
     if (!user) {
       return {
         success: false,

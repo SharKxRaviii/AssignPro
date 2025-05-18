@@ -1,6 +1,34 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignUpForm = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3000/api/users/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name, email, password})
+      });
+
+      const data = await response.json();
+      console.log('signup data:', data);
+
+      setName('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-10 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -15,7 +43,7 @@ const SignUp = () => {
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSignUpForm}>
           {/* Name */}
           <div>
             <label
@@ -28,6 +56,8 @@ const SignUp = () => {
               <input
                 type="text"
                 name="name"
+                value={name}
+                onChange={(e)=> setName(e.target.value)}
                 id="name"
                 autocomplete="name"
                 required
@@ -48,6 +78,8 @@ const SignUp = () => {
               <input
                 type="email"
                 name="email"
+                value={email}
+                onChange={(e)=> setEmail(e.target.value)}
                 id="email"
                 autocomplete="email"
                 required
@@ -70,6 +102,8 @@ const SignUp = () => {
               <input
                 type="password"
                 name="password"
+                value={password}
+                onChange={(e)=> setPassword(e.target.value)}
                 id="password"
                 autocomplete="current-password"
                 required

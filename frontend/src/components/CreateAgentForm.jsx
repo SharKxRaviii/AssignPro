@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateAgentForm = () => {
@@ -8,10 +8,26 @@ const CreateAgentForm = () => {
     mobile: "",
     password: "",
   });
-
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuthorized(false);
+    }
+  }, []);
+
+  if (!isAuthorized) {
+    return (
+      <p className="p-6 text-red-600 text-center text-xl font-semibold">
+        Unauthorized Access. Please login.
+      </p>
+    );
+  }
 
   const handleChange = (e) => {
     setFormData({
@@ -23,6 +39,7 @@ const CreateAgentForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     const token = localStorage.getItem("token");
 
@@ -37,22 +54,25 @@ const CreateAgentForm = () => {
       });
 
       const data = await response.json();
-      if (response.ok) {
-        setMessage("Agent created successfully!");
-        navigate('/api/agents')
-        setFormData({
-          name: "",
-          email: "",
-          mobile: "",
-          password: "",
-        });
-      } else {
+
+      if (!response.ok) {
         setMessage(data.message || "Failed to create agent");
+      } else {
+        setMessage("Agent created successfully!");
+        setFormData({ name: "", email: "", mobile: "", password: "" });
+        navigate("/api/agents");
       }
     } catch (error) {
       setMessage("Error: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <p className="p-6 text-center text-lg">Loading...</p>;
+  }
+
 
   return (
     <div className="p-6 max-w-md mx-auto border rounded-lg shadow-md bg-white mt-16">

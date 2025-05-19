@@ -48,7 +48,7 @@ const AgentList = () => {
   }
 
   if (unauthorized) {
-    return <p className="p-6 text-red-600 text-center text-xl font-semibold">Unauthorized Access</p>;
+    return <p className="p-6 text-red-600 text-center text-xl font-semibold">Unauthorized Access. Please login.</p>;
   }
 
   return (

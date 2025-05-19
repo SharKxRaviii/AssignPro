@@ -1,3 +1,4 @@
+import { AuthProvider } from './context/AuthContext';
 import NavBar from './components/NavBar';
 import './App.css'
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
@@ -68,7 +69,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+    <AuthProvider>
       <RouterProvider router={router}/>
+    </AuthProvider>
+      
     </>
     
   )

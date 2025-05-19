@@ -1,6 +1,0 @@
-change link according to navbar.
-protect all routes if not verified like AgentList.jsx
-add logout(clear token or res.clearCookies())
-
-
-delete this file after all task.

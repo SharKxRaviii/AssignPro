@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
@@ -25,6 +28,8 @@ const Login = () => {
       if (response.ok) {
         console.log('login data:', data);
         localStorage.setItem('token', data.token);
+
+        setIsAuthenticated(true);
         navigate('/api/agents');
       } else {
         setError(data.message || 'Invalid credentials');
@@ -36,7 +41,7 @@ const Login = () => {
       setError('Something went wrong. Please try again.');
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

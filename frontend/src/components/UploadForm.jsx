@@ -1,10 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const FileUploadForm = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsAuthorized(false);
+      }
+    }, []);
+  
+    if (!isAuthorized) {
+      return (
+        <p className="p-6 text-red-600 text-center text-xl font-semibold">
+          Unauthorized Access. Please login.
+        </p>
+      );
+    }
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -13,6 +31,7 @@ const FileUploadForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     if (!file) {
       setMessage("Please select a file to upload.");
@@ -33,7 +52,8 @@ const FileUploadForm = () => {
       });
 
       const data = await response.json();
-      if (response.ok) {
+
+       if (response.ok) {
         setMessage("File uploaded and tasks assigned successfully!");
         navigate('/api/agents');
         setFile(null);
@@ -42,8 +62,14 @@ const FileUploadForm = () => {
       }
     } catch (error) {
       setMessage("Error: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <p className="p-6 text-center text-lg">Loading...</p>;
+  }
 
   return (
     <div className="p-6 max-w-md mx-auto bg-white border border-gray-200 rounded-lg shadow-xl mt-24">

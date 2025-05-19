@@ -1,21 +1,16 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const NavBar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(token ? true : false);
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem('tokne');
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate('/login');
-  }
-  
+  };
 
   return (
     <nav className="w-full flex items-center justify-evenly bg-indigo-900 px-8 py-2">
@@ -28,6 +23,7 @@ const NavBar = () => {
           />
         </NavLink>
       </div>
+
       <div>
         <ul className="flex gap-x-6">
           {!isAuthenticated ? (
@@ -45,6 +41,11 @@ const NavBar = () => {
             </>
           ) : (
             <>
+            <li>
+                <NavLink to="/api/agents/" className="text-white text-lg hover:underline">
+                  Home
+                </NavLink>
+              </li>
               <li>
                 <NavLink to="/api/agents/create-agent" className="text-white text-lg hover:underline">
                   Add Agent
@@ -58,7 +59,7 @@ const NavBar = () => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="text-white text-lg hover:underline"
+                  className="text-white text-lg hover:underline cursor-pointer"
                 >
                   Logout
                 </button>

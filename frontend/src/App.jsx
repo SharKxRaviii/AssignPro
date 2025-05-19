@@ -1,18 +1,25 @@
 import NavBar from './components/NavBar';
 import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
-import Logo from './components/Logo';
-import { useEffect } from 'react';
+// import Logo from './components/Logo';
+import AgentList from './components/AgentList';
+import CreateAgentForm from './components/CreateAgentForm';
+import FileUploadForm from './components/UploadForm';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
+    element: <Navigate to="/signup" replace />
+  },
+
+  {
+    path: '/signup',
+    element:( 
       <div>
         <NavBar/>
-        <Logo/>
+        <SignUp/>
       </div>
       )
   },
@@ -28,33 +35,37 @@ const router = createBrowserRouter([
   },
 
   {
-    path: '/signup',
+    path: '/api/agents',
     element:( 
       <div>
         <NavBar/>
-        <SignUp/>
+        <AgentList/>
+      </div>
+      )
+  },
+
+  {
+    path: '/api/agents/create-agent',
+    element:( 
+      <div>
+        <NavBar/>
+        <CreateAgentForm/>
+      </div>
+      )
+  },
+
+  {
+    path: '/api/files/upload',
+    element:( 
+      <div>
+        <NavBar/>
+        <FileUploadForm/>
       </div>
       )
   },
 ]);
 
 function App() {
-
-  useEffect(() => {
-    const connectToBackend = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/');
-        const data = await response.json();
-        console.log("Backend response:", data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-
-    connectToBackend();
-  }, [] );
-  
-
   return (
     <>
       <RouterProvider router={router}/>

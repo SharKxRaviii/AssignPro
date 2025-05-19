@@ -1,6 +1,43 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleLoginForm = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3000/api/users/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('login data:', data);
+        localStorage.setItem('token', data.token);
+        navigate('/api/agents');
+      } else {
+        setError(data.message || 'Invalid credentials');
+      }
+
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      setError('Something went wrong. Please try again.');
+      console.log(error.message);
+    }
+  }
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -15,7 +52,12 @@ const Login = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6">
+        {error && (
+          <div className="mb-4 text-sm text-red-600 font-medium text-center">
+            {error}
+          </div>
+        )}
+        <form className="space-y-6" onSubmit={handleLoginForm}>
           <div>
             <label
               htmlFor="email"
@@ -28,7 +70,9 @@ const Login = () => {
                 type="email"
                 name="email"
                 id="email"
-                autocomplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
@@ -38,7 +82,7 @@ const Login = () => {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm/6 font-medium text-gray-900"
               >
                 Password
@@ -49,7 +93,9 @@ const Login = () => {
                 type="password"
                 name="password"
                 id="password"
-                autocomplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
@@ -67,7 +113,7 @@ const Login = () => {
         </form>
 
         <p className="mt-10 text-center text-sm/6 text-gray-500">
-          Create new account {""}
+          Create new account{" "}
           <Link
             to={"/signup"}
             className="font-semibold text-indigo-600 hover:text-indigo-500"

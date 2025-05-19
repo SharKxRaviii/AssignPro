@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSignUpForm = async (e) => {
     e.preventDefault();
@@ -19,8 +20,12 @@ const SignUp = () => {
       });
 
       const data = await response.json();
-      console.log('signup data:', data);
 
+      if(response.ok) {
+        console.log('signup data:', data);
+        navigate('/login');
+      }
+      
       setName('');
       setEmail('');
       setPassword('');
@@ -59,7 +64,7 @@ const SignUp = () => {
                 value={name}
                 onChange={(e)=> setName(e.target.value)}
                 id="name"
-                autocomplete="name"
+                autoComplete="name"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
@@ -81,7 +86,7 @@ const SignUp = () => {
                 value={email}
                 onChange={(e)=> setEmail(e.target.value)}
                 id="email"
-                autocomplete="email"
+                autoComplete="email"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
@@ -92,7 +97,7 @@ const SignUp = () => {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm/6 font-medium text-gray-900"
               >
                 Password
@@ -105,7 +110,7 @@ const SignUp = () => {
                 value={password}
                 onChange={(e)=> setPassword(e.target.value)}
                 id="password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 required
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />

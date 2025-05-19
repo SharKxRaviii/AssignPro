@@ -20,3 +20,21 @@ export const createAgent = async (name, email, mobile, password) => {
         }
     }
 }
+
+export const getAllAgents = async () => {
+    try {
+        const allAgents = await agentModel.find();
+        return {
+            success: true,
+            res: allAgents
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: {
+                statusCode: 500,
+                msg: error.message
+            }
+        }
+    }
+}

@@ -38,7 +38,15 @@ const agentSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Password is required'],
         minLength: [6, "Password must be at least 6 characters long"]
+    },
+
+    assignedTasks: [
+    {
+      firstName: String,
+      phone: String,
+      notes: String,
     }
+  ],
 });
 
 const agentModel = mongoose.model("agent", agentSchema);

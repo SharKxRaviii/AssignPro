@@ -11,7 +11,7 @@ export default function fileValidator(req, res, next) {
         return res.status(400).json({message: "no file uploaded"});
     }
 
-    if(!allowedMimeTypes.includes(file.mimeTypes)){
+    if(!allowedMimeTypes.includes(file.mimetype)) {
         return res.status(400).json({ message: 'Invalid file type. Only CSV, XLS, and XLSX are allowed.' });
     }
 
